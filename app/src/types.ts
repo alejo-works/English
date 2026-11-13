@@ -47,11 +47,17 @@ export interface CardStateRecord {
   id: string
   card: FsrsCard
   updated_at: string
+  /** 1 = cambiado en este dispositivo y aún no subido a Supabase */
+  dirty?: 0 | 1
 }
 
 /** Un repaso (store "logs"). */
 export interface ReviewLogRecord {
   logId?: number
+  /** uuid generado en el dispositivo; es el id en Supabase */
+  uid: string
+  /** 1 = ya está en Supabase */
+  synced: 0 | 1
   key: string
   kind: Kind
   id: string

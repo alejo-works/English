@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { CardsFile, CardStateRecord, DeckItem, ReviewLogRecord, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 import { loadLogs, loadSettings, loadStates, saveSettings } from './lib/db'
+import { initCloud, scheduleSync } from './lib/cloud'
 import { stateKey } from './lib/scheduler'
 import Today from './views/Today'
 import Review from './views/Review'
@@ -56,9 +57,15 @@ export default function App() {
     }
   }, [])
 
+  /** Recarga solo el progreso (tras bajar cambios de Supabase). */
+  const reloadProgress = useCallback(async () => {
+    const [states, logs] = await Promise.all([loadStates(), loadLogs()])
+    setData((d) => (d ? { ...d, states, logs } : d))
+  }, [])
+
   useEffect(() => {
-    void reload()
-  }, [reload])
+    void reload().then(() => initCloud(() => void reloadProgress()))
+  }, [reload, reloadProgress])
 
   const updateSettings = useCallback(async (patch: Partial<Settings>) => {
     setData((d) => {
@@ -71,27 +78,27 @@ export default function App() {
   }, [])
 
   const onReviewed = useCallback(
-    (state: CardStateRecord, log: ReviewLogRecord) =>
+    (state: CardStateRecord, log: ReviewLogRecord) => {
       setData((d) => {
         if (!d) return d
         const states = new Map(d.states)
         states.set(state.key, state)
         return { ...d, states, logs: [...d.logs, log] }
-      }),
+      })
+      scheduleSync()
+    },
     [],
   )
 
-  const onUndone = useCallback(
-    (key: string, previous: CardStateRecord | undefined, logId: number) =>
-      setData((d) => {
-        if (!d) return d
-        const states = new Map(d.states)
-        if (previous) states.set(key, previous)
-        else states.delete(key)
-        return { ...d, states, logs: d.logs.filter((l) => l.logId !== logId) }
-      }),
-    [],
-  )
+  const onUndone = useCallback((restored: CardStateRecord, logId: number) => {
+    setData((d) => {
+      if (!d) return d
+      const states = new Map(d.states)
+      states.set(restored.key, restored)
+      return { ...d, states, logs: d.logs.filter((l) => l.logId !== logId) }
+    })
+    scheduleSync()
+  }, [])
 
   if (error) {
     return (
@@ -120,7 +127,16 @@ export default function App() {
           />
         )}
         {tab === 'library' && <Library data={data} />}
-        {tab === 'settings' && <SettingsView data={data} onChange={updateSettings} onDataReplaced={reload} />}
+        {tab === 'settings' && (
+          <SettingsView
+            data={data}
+            onChange={updateSettings}
+            onDataReplaced={async () => {
+              await reload()
+              scheduleSync(0)
+            }}
+          />
+        )}
       </main>
       <nav className="tabbar" aria-label="Secciones">
         {TABS.map((t) => (

@@ -1038,3 +1038,67 @@ h2 {
     transition: none !important;
   }
 }
+
+/* ---------- Sincronización ---------- */
+
+.row-form {
+  display: flex;
+  gap: 8px;
+}
+
+.row-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 1rem;
+}
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sync-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--good);
+}
+
+.sync-syncing .sync-dot {
+  background: var(--easy);
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+.sync-offline .sync-dot {
+  background: var(--muted);
+}
+
+.sync-error .sync-dot {
+  background: var(--again);
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.3;
+  }
+}
+
+code {
+  font-size: 0.85em;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 6px;
+}
+
+.today-sync {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0;
+}

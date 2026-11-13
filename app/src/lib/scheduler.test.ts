@@ -47,6 +47,8 @@ function stateAt(item: DeckItem, due: Date, state: State): CardStateRecord {
 
 function newLog(item: DeckItem, when: Date): ReviewLogRecord {
   return {
+    uid: `${item.key}-${when.getTime()}`,
+    synced: 0,
     key: item.key,
     kind: 'vocab',
     id: item.data.id,

@@ -1,10 +1,13 @@
 import { useMemo } from 'react'
 import type { DeckData } from '../App'
+import { useCloud } from '../lib/cloud'
+import { ago } from '../components/CloudSync'
 import { activeItems, buildQueue, dayKey, dueOnDay, State, streak } from '../lib/scheduler'
 
 export default function Today({ data, onStart }: { data: DeckData; onStart: () => void }) {
   const now = new Date()
   const { items, states, logs, settings } = data
+  const cloud = useCloud()
 
   const info = useMemo(() => {
     const q = buildQueue(items, states, logs, settings, now)
@@ -102,6 +105,18 @@ export default function Today({ data, onStart }: { data: DeckData; onStart: () =
           </span>
         </div>
       </div>
+
+      {cloud.configured && (
+        <p className="today-sync">
+          {!cloud.session
+            ? 'Sincronización desactivada · entra en Ajustes'
+            : cloud.status === 'offline'
+              ? `Sin conexión · ${cloud.pending} cambios pendientes`
+              : cloud.status === 'error'
+                ? 'Error al sincronizar · mira Ajustes'
+                : `Sincronizado ${ago(cloud.lastSync)}`}
+        </p>
+      )}
     </section>
   )
 }

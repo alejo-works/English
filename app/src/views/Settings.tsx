@@ -3,6 +3,7 @@ import type { DeckData } from '../App'
 import type { Settings, Theme } from '../types'
 import { exportBackup, importBackup, parseBackup, resetProgress } from '../lib/db'
 import { englishVoices, onVoicesChanged, speak, speechSupported } from '../lib/speech'
+import CloudSync from '../components/CloudSync'
 
 interface Props {
   data: DeckData
@@ -55,7 +56,7 @@ export default function SettingsView({ data, onChange, onDataReplaced }: Props) 
   }
 
   const doReset = async () => {
-    if (!window.confirm('¿Borrar todo tu progreso en este dispositivo? Exporta una copia antes si la quieres guardar.')) return
+    if (!window.confirm('¿Borrar el progreso de este dispositivo? Si tienes la sincronización activa, se volverá a descargar de la nube.')) return
     await resetProgress()
     await onDataReplaced()
     flash('Progreso borrado.')
@@ -66,6 +67,8 @@ export default function SettingsView({ data, onChange, onDataReplaced }: Props) 
       <header className="view-head">
         <h1>Ajustes</h1>
       </header>
+
+      <CloudSync />
 
       <div className="card-surface group">
         <h2>Apariencia</h2>
@@ -153,7 +156,7 @@ export default function SettingsView({ data, onChange, onDataReplaced }: Props) 
 
       <div className="card-surface group">
         <h2>Copia de seguridad</h2>
-        <p className="muted small">El progreso se guarda solo en este dispositivo. Exporta una copia de vez en cuando o para pasarla a otro dispositivo.</p>
+        <p className="muted small">Copia JSON de todo tu progreso. Útil como respaldo extra o si no usas la sincronización.</p>
         <div className="row-gap">
           <button className="btn" onClick={() => void doExport()}>
             Exportar copia

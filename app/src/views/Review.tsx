@@ -12,7 +12,7 @@ import {
   State,
   type Grade,
 } from '../lib/scheduler'
-import { saveReview, undoReview } from '../lib/db'
+import { newUid, saveReview, undoReview } from '../lib/db'
 import { speak, speechSupported } from '../lib/speech'
 import { AREA_LABEL, TYPE_LABEL } from '../lib/labels'
 import RegisterBadge from '../components/RegisterBadge'
@@ -21,7 +21,7 @@ interface Props {
   data: DeckData
   settings: Settings
   onReviewed: (state: CardStateRecord, log: ReviewLogRecord) => void
-  onUndone: (key: string, previous: CardStateRecord | undefined, logId: number) => void
+  onUndone: (restored: CardStateRecord, logId: number) => void
   onModeChange: (mode: ReviewMode) => void
   onExit: () => void
 }
@@ -112,6 +112,8 @@ export default function Review({ data, settings, onReviewed, onUndone, onModeCha
         updated_at: at.toISOString(),
       }
       const logRec: ReviewLogRecord = {
+        uid: newUid(),
+        synced: 0,
         key: current.key,
         kind: current.kind,
         id: current.data.id,
@@ -141,8 +143,8 @@ export default function Review({ data, settings, onReviewed, onUndone, onModeCha
     const last = undoStack[undoStack.length - 1]
     if (!last || busy) return
     setBusy(true)
-    await undoReview(last.key, last.previous, last.logId)
-    onUndone(last.key, last.previous, last.logId)
+    const restored = await undoReview(last.key, last.previous, last.logId, { kind: last.item.kind, id: last.item.data.id })
+    onUndone(restored, last.logId)
     setUndoStack((s) => s.slice(0, -1))
     setDoneInSession((n) => Math.max(0, n - 1))
     setCurrent(last.item)
