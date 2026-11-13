@@ -16,9 +16,11 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: |
+          auth=()
+          # Claves antiguas (JWT eyJ…) también como Bearer; las nuevas sb_secret_… solo en apikey
+          [[ "$SUPABASE_SERVICE_KEY" == eyJ* ]] && auth=(-H "Authorization: Bearer $SUPABASE_SERVICE_KEY")
           curl --fail-with-body -sS \
-            -H "apikey: $SUPABASE_SERVICE_KEY" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" "${auth[@]}" \
             "$SUPABASE_URL/rest/v1/card_state?select=key&limit=1"
           echo
           echo "Supabase activo"

@@ -32,7 +32,9 @@ def fetch_rows(base: str, key: str) -> list[dict]:
             f"{base.rstrip('/')}/rest/v1/card_state?select={select}&order=kind.asc,card_id.asc",
             headers={
                 "apikey": key,
-                "Authorization": f"Bearer {key}",
+                # Las claves nuevas (sb_secret_…) no son JWT: basta con apikey.
+                # Las antiguas (service_role, eyJ…) también van como Bearer.
+                **({"Authorization": f"Bearer {key}"} if key.startswith("eyJ") else {}),
                 "Range-Unit": "items",
                 "Range": f"{start}-{start + PAGE - 1}",
             },
