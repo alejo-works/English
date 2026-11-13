@@ -1,0 +1,10 @@
+id,wrong,right,rule,category,date_added
+pp-yesterday,I have sent it yesterday.,I sent it yesterday.,Momento cerrado (yesterday) → Simple Past.,tense,2026-11-13
+since-present,I live here since 2020.,I've lived here since 2020.,Duración hasta ahora con since/for → Present Perfect.,tense,2026-11-13
+for-present,I work with Python for three years.,I've been working with Python for three years.,Llevo X haciendo → Present Perfect Continuous + for.,tense,2026-11-13
+will-after-if,"If you will send me the file, I'll review it.","If you send me the file, I'll review it.",Nunca will después de if: if + presente.,tense,2026-11-13
+will-after-when,"When I will arrive, I'll call you.","When I arrive, I'll call you.",Nunca will después de when: when + presente.,tense,2026-11-13
+want-that,I want that you check the code.,I want you to check the code.,Querer que → want + persona + to.,word_order,2026-11-13
+know-continuous,I'm knowing the answer.,I know the answer.,Know es verbo de estado: no va en continuo.,tense,2026-11-13
+last-year-pp,I have been in London last year.,I was in London last year.,Last year → Simple Past.,tense,2026-11-13
+would-after-if,"If I would have more time, I would help.","If I had more time, I would help.","Hipotético: if + Simple Past, sin would tras if.",tense,2026-11-13

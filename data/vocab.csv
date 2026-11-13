@@ -1,0 +1,21 @@
+id,english,spanish,example_en,example_es,type,area,register,source,date_added,notes
+follow-up-on,follow up on,hacer seguimiento de,I wanted to follow up on what we discussed.,Quería hacer seguimiento de lo que hablamos.,phrasal_verb,business,neutral,Plan de inglés,2026-11-13,/ˈfɑːloʊ ʌp ɑːn/; muy común al empezar un email
+reach-out,reach out (to),contactar con,"If you have any questions, feel free to reach out.","Si tienes alguna pregunta, no dudes en contactarnos.",phrasal_verb,business,neutral,Plan de inglés,2026-11-13,Más suave que contact
+get-back-to,get back to (someone),responder a alguien más tarde,I'll get back to you by end of day.,Te respondo antes de que acabe el día.,phrasal_verb,business,neutral,Plan de inglés,2026-11-13,EOD = end of day
+roll-out,roll out,desplegar; lanzar por fases,We're going to roll this out next week.,Vamos a desplegar esto la semana que viene.,phrasal_verb,tech_ai,neutral,Plan de inglés,2026-11-13,Sustantivo: a rollout
+deadline,deadline,fecha límite,The deadline for the migration is Friday.,La fecha límite de la migración es el viernes.,word,business,neutral,Plan de inglés,2026-11-13,/ˈdɛdlaɪn/
+stakeholder,stakeholder,parte interesada,We need to align with the stakeholders before the launch.,Tenemos que alinearnos con las partes interesadas antes del lanzamiento.,word,business,formal,Plan de inglés,2026-11-13,/ˈsteɪkhoʊldər/
+data-pipeline,data pipeline,flujo de datos; pipeline de datos,The data pipeline runs every night at 2 a.m.,El pipeline de datos se ejecuta cada noche a las 2.,collocation,tech_ai,neutral,Plan de inglés,2026-11-13,
+fine-tune,fine-tune,ajustar (un modelo),We fine-tuned the model on our support tickets.,Ajustamos el modelo con nuestros tickets de soporte.,word,tech_ai,neutral,Plan de inglés,2026-11-13,Sustantivo: fine-tuning
+hallucinate,hallucinate,alucinar (un LLM),The model sometimes hallucinates dates that don't exist.,El modelo a veces se inventa fechas que no existen.,word,tech_ai,neutral,Plan de inglés,2026-11-13,/həˈluːsəneɪt/
+edge-case,edge case,caso límite,We didn't test that edge case before the release.,No probamos ese caso límite antes del lanzamiento.,collocation,tech_ai,neutral,Plan de inglés,2026-11-13,
+bottleneck,bottleneck,cuello de botella,The database is the main bottleneck right now.,La base de datos es el principal cuello de botella ahora mismo.,word,tech_ai,neutral,Plan de inglés,2026-11-13,
+revenue,revenue,ingresos,Revenue grew 12% year over year.,Los ingresos crecieron un 12 % interanual.,word,finance,neutral,Plan de inglés,2026-11-13,/ˈrɛvənuː/ (US)
+cash-flow,cash flow,flujo de caja,The startup has a cash flow problem.,La startup tiene un problema de flujo de caja.,collocation,finance,neutral,Plan de inglés,2026-11-13,
+ballpark-figure,ballpark figure,cifra aproximada,Can you give me a ballpark figure for the project?,¿Me puedes dar una cifra aproximada del proyecto?,idiom,finance,informal,Plan de inglés,2026-11-13,"Viene del béisbol; ok en reuniones internas"
+touch-base,touch base,ponerse en contacto brevemente,Let's touch base on Monday.,Hablamos brevemente el lunes.,idiom,business,informal,Plan de inglés,2026-11-13,Muy corporativo US
+on-the-same-page,be on the same page,estar de acuerdo; tener la misma información,I just want to make sure we're on the same page.,Solo quiero asegurarme de que estamos de acuerdo.,chunk,business,neutral,Plan de inglés,2026-11-13,
+deadass,deadass,en serio; de verdad,"Deadass, that was the best pizza I've ever had.","En serio, fue la mejor pizza que he probado.",slang,nyc,slang,Plan de inglés,2026-11-13,Muy de NYC; nunca con clientes
+mad,mad (+ adjetivo),muy,That line was mad long.,Esa cola era larguísima.,slang,nyc,slang,Plan de inglés,2026-11-13,Intensificador neoyorquino
+bodega,bodega,tienda de barrio (24 h),I'm grabbing a coffee at the bodega.,Voy a pillar un café en la tienda de la esquina.,word,nyc,informal,Plan de inglés,2026-11-13,/boʊˈdeɪɡə/
+grab-a-coffee,grab a coffee,tomar un café (rápido),Do you want to grab a coffee after the meeting?,¿Quieres tomar un café después de la reunión?,chunk,daily,informal,Plan de inglés,2026-11-13,
