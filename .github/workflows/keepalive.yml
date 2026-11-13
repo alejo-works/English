@@ -10,7 +10,6 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
-    environment: Keys # los secrets de Supabase viven en este environment
     environment: Keys # los secrets de Supabase están en este environment
     steps:
       - name: Consulta a Supabase

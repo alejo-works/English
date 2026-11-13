@@ -16,7 +16,6 @@ concurrency:
 jobs:
   export:
     runs-on: ubuntu-latest
-    environment: Keys # los secrets de Supabase viven en este environment
     environment: Keys # los secrets de Supabase están en este environment
     steps:
       - uses: actions/checkout@v4
