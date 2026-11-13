@@ -5,11 +5,12 @@ import { loadLogs, loadSettings, loadStates, saveSettings } from './lib/db'
 import { initCloud, scheduleSync } from './lib/cloud'
 import { stateKey } from './lib/scheduler'
 import Today from './views/Today'
-import Review from './views/Review'
+import Review, { type ReviewFilter } from './views/Review'
+import Stats from './views/Stats'
 import Library from './views/Library'
 import SettingsView from './views/Settings'
 
-export type Tab = 'today' | 'review' | 'library' | 'settings'
+export type Tab = 'today' | 'review' | 'library' | 'stats' | 'settings'
 
 export interface DeckData {
   items: DeckItem[]
@@ -36,11 +37,17 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'today', label: 'Hoy', icon: 'M3 12l9-8 9 8M5 10v10h14V10' },
   { id: 'review', label: 'Repasar', icon: 'M4 6h12v14H4zM8 2h12v14' },
   { id: 'library', label: 'Biblioteca', icon: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-5-5' },
+  { id: 'stats', label: 'Progreso', icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2' },
   { id: 'settings', label: 'Ajustes', icon: 'M4 7h10M18 7h2M4 17h4M12 17h8M14 4v6M8 14v6' },
 ]
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('today')
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all')
+  const startReview = (filter: ReviewFilter) => {
+    setReviewFilter(filter)
+    setTab('review')
+  }
   const [data, setData] = useState<DeckData | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -115,18 +122,21 @@ export default function App() {
   return (
     <div className="shell">
       <main className="content">
-        {tab === 'today' && <Today data={data} onStart={() => setTab('review')} />}
+        {tab === 'today' && <Today data={data} onStart={startReview} />}
         {tab === 'review' && (
           <Review
             data={data}
             settings={data.settings ?? DEFAULT_SETTINGS}
+            filter={reviewFilter}
+            onClearFilter={() => setReviewFilter('all')}
             onReviewed={onReviewed}
             onUndone={onUndone}
             onModeChange={(mode) => updateSettings({ mode })}
             onExit={() => setTab('today')}
           />
         )}
-        {tab === 'library' && <Library data={data} />}
+        {tab === 'library' && <Library data={data} onPracticeErrors={() => startReview('errors')} />}
+        {tab === 'stats' && <Stats data={data} />}
         {tab === 'settings' && (
           <SettingsView
             data={data}
@@ -143,7 +153,7 @@ export default function App() {
           <button
             key={t.id}
             className={`tab ${tab === t.id ? 'active' : ''}`}
-            onClick={() => setTab(t.id)}
+            onClick={() => (t.id === 'review' ? startReview('all') : setTab(t.id))}
             aria-current={tab === t.id ? 'page' : undefined}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">

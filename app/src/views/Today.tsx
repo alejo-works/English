@@ -4,7 +4,7 @@ import { useCloud } from '../lib/cloud'
 import { ago } from '../components/CloudSync'
 import { activeItems, buildQueue, dayKey, dueOnDay, State, streak } from '../lib/scheduler'
 
-export default function Today({ data, onStart }: { data: DeckData; onStart: () => void }) {
+export default function Today({ data, onStart }: { data: DeckData; onStart: (filter: 'all' | 'errors') => void }) {
   const now = new Date()
   const { items, states, logs, settings } = data
   const cloud = useCloud()
@@ -24,6 +24,8 @@ export default function Today({ data, onStart }: { data: DeckData; onStart: () =
     const dueToday = dueOnDay(active, states, now, 0)
     const tomorrow = dueOnDay(active, states, now, 1)
     const correct = todayLogs.filter((l) => l.rating > 1).length
+    const errorItems = items.filter((i) => i.kind === 'error')
+    const errQueue = buildQueue(errorItems, states, logs, { ...settings, includeErrors: true }, now)
     return {
       pending: dueToday + q.newAvailable.length,
       dueToday,
@@ -35,6 +37,8 @@ export default function Today({ data, onStart }: { data: DeckData; onStart: () =
       tomorrow,
       counts,
       total: active.length,
+      errorsPending: errQueue.dueNow.length + errQueue.newAvailable.length,
+      errorsTotal: errorItems.length,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, states, logs, settings])
@@ -61,7 +65,7 @@ export default function Today({ data, onStart }: { data: DeckData; onStart: () =
             <i className="dot dot-review" /> {info.dueToday} repasos
           </span>
         </div>
-        <button className="btn btn-primary btn-big" onClick={onStart} disabled={info.dueNow === 0}>
+        <button className="btn btn-primary btn-big" onClick={() => onStart('all')} disabled={info.dueNow === 0}>
           {info.dueNow === 0 ? 'Todo al día' : info.reviewedToday ? 'Seguir repasando' : 'Empezar repaso'}
         </button>
       </div>
@@ -86,6 +90,16 @@ export default function Today({ data, onStart }: { data: DeckData; onStart: () =
           <div className="stat-label">tarjetas en el mazo</div>
         </div>
       </div>
+
+      {info.errorsTotal > 0 && (
+        <button className="card-surface errors-cta" onClick={() => onStart('errors')}>
+          <span>
+            <b>Practicar mis errores</b>
+            <span className="muted small">Escribe la frase corregida · {info.errorsTotal} en total</span>
+          </span>
+          <span className="errors-count">{info.errorsPending}</span>
+        </button>
+      )}
 
       <div className="card-surface progress-box">
         <div className="progress-bar" aria-hidden="true">

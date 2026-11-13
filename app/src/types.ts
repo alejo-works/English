@@ -72,7 +72,7 @@ export interface ReviewLogRecord {
   mode: ReviewMode
 }
 
-export type ReviewMode = 'normal' | 'inverse'
+export type ReviewMode = 'normal' | 'inverse' | 'audio' | 'dictation' | 'cloze'
 export type Theme = 'system' | 'light' | 'dark'
 
 export interface Settings {

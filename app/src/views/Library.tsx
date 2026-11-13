@@ -11,7 +11,7 @@ function normalize(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 }
 
-export default function Library({ data }: { data: DeckData }) {
+export default function Library({ data, onPracticeErrors }: { data: DeckData; onPracticeErrors: () => void }) {
   const { items, states } = data
   const [section, setSection] = useState<Section>('vocab')
   const [query, setQuery] = useState('')
@@ -106,9 +106,16 @@ export default function Library({ data }: { data: DeckData }) {
         )}
       </div>
 
-      <p className="muted small">
-        {filtered.length} {filtered.length === 1 ? 'tarjeta' : 'tarjetas'}
-      </p>
+      <div className="lib-count">
+        <p className="muted small">
+          {filtered.length} {filtered.length === 1 ? 'tarjeta' : 'tarjetas'}
+        </p>
+        {section === 'error' && (
+          <button className="link-btn" onClick={onPracticeErrors}>
+            Practicar errores →
+          </button>
+        )}
+      </div>
 
       <ul className="lib-list">
         {filtered.map((item) => (

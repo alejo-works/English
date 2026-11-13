@@ -87,10 +87,13 @@ python scripts/validate_csv.py
 - **Repasar:** toca la tarjeta (o pulsa espacio) para girarla y valora con Again / Hard / Good / Easy. Cada botón muestra cuándo volverá la tarjeta.
   - Teclado: `espacio` gira, `1`–`4` valora, `Enter` = Good, `Z` deshace, `S` pronuncia.
   - Móvil: toca para girar; con la tarjeta girada, desliza → Good y ← Again.
-  - Modos `EN → ES` y `ES → EN`. El altavoz lee la palabra o el ejemplo con voz en-US.
+  - Modos: `EN → ES`, `ES → EN`, **Oído** (suena la palabra y dices qué significa), **Dictado** (oyes el ejemplo y lo escribes; la app marca las diferencias) y **Cloze** (el ejemplo con la expresión tapada). El altavoz lee la palabra o el ejemplo con voz en-US.
+  - Las tarjetas de error se responden escribiendo la frase corregida. Tras comprobar, el botón sugerido (Good / Hard / Again) sale marcado y `Enter` lo elige.
+  - **Practicar mis errores** (en Hoy o en Biblioteca → Errores) abre un repaso solo con `errors.csv`.
   - Las tarjetas `slang` e `informal` llevan un aviso para no usarlas con clientes.
 - **Biblioteca:** búsqueda y filtros por tipo, área, registro, fuente y estado.
-- **Ajustes:** tema, nuevas por día (20 por defecto), retención objetivo (90 %), voz, incluir errores, exportar/importar copia.
+- **Progreso:** retención real (30 días), aciertos, calendario de actividad, previsión de 14 días, estado del mazo, tarjetas que llevan X días sin verse y lo que más fallas.
+- **Ajustes:** sincronización, tema, nuevas por día (20 por defecto), retención objetivo (90 %), voz, incluir errores, exportar/importar copia y **exportar a Anki** (.txt con tabuladores: en Anki, Archivo → Importar).
 
 > **Sincronización:** Ajustes → Sincronización → email y contraseña. Hazlo en cada dispositivo. Si dos dispositivos repasan la misma tarjeta, gana el repaso más reciente; el historial guarda los dos. La copia JSON (Ajustes → Copia de seguridad) sigue disponible como respaldo extra.
 
@@ -142,4 +145,4 @@ La app entra con email + contraseña (en iPhone, un enlace mágico abriría Safa
 
 - **Fase 1 (hecha):** CSV iniciales, validación, PWA offline con FSRS, Hoy, Repasar, Biblioteca, Ajustes y progreso en IndexedDB.
 - **Fase 2 (hecha):** Supabase (login con email y contraseña, `card_state` y `review_log` con RLS), sincronización local-first móvil ↔ PC, `sync-progress.yml` nocturno → `data/review_state.csv` y `keepalive.yml`.
-- **Fase 3:** modos audio, dictado y cloze, estadísticas, sección Errores y exportador opcional a Anki.
+- **Fase 3 (hecha):** modos Oído, Dictado y Cloze, pestaña Progreso, práctica de errores escribiendo y exportador a Anki.

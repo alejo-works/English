@@ -38,6 +38,31 @@ export default function SettingsView({ data, onChange, onDataReplaced }: Props) 
     flash(`Copia exportada: ${backup.states.length} tarjetas, ${backup.logs.length} repasos.`)
   }
 
+  const doAnki = () => {
+    const esc = (t: string) => t.replace(/\t/g, ' ').replace(/\r?\n/g, '<br>')
+    const lines = ['#separator:tab', '#html:true', '#tags column:3']
+    for (const it of data.items) {
+      if (it.kind === 'vocab') {
+        const v = it.data
+        const back = [v.spanish, `<i>${v.example_en}</i>`, v.example_es, v.notes].filter(Boolean).map(esc).join('<br>')
+        lines.push([esc(v.english), back, `english-deck ${v.type} ${v.area} ${v.register}`].join('\t'))
+      } else {
+        const e = it.data
+        lines.push([esc(`Corrige: ${e.wrong}`), esc(`${e.right}<br>${e.rule}`), `english-deck error ${e.category}`].join('\t'))
+      }
+    }
+    const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `english-deck-anki-${new Date().toISOString().slice(0, 10)}.txt`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+    flash(`Exportadas ${data.items.length} tarjetas para Anki (Archivo → Importar).`)
+  }
+
   const doImport = async (file: File) => {
     try {
       const backup = parseBackup(JSON.parse(await file.text()))
@@ -175,6 +200,9 @@ export default function SettingsView({ data, onChange, onDataReplaced }: Props) 
             }}
           />
         </div>
+        <button className="link-btn" onClick={doAnki}>
+          Exportar tarjetas a Anki (.txt)
+        </button>
         <button className="link-btn danger" onClick={() => void doReset()}>
           Borrar progreso
         </button>
