@@ -5,14 +5,17 @@ Mi plan de inglés americano y **English Deck**, la app de repaso de vocabulario
 ## Cómo funciona
 
 ```
-data/vocab.csv ──push──▶ Cloudflare Pages compila ──▶ app en el móvil/PC ──▶ progreso en el dispositivo
+data/vocab.csv ──push──▶ Cloudflare compila ──▶ app en el móvil/PC ──▶ progreso en el dispositivo ⇄ Supabase
+                                                                                        │ cada noche
+                                                                     data/review_state.csv ◀┘
 ```
 
 1. Se añaden filas a `data/vocab.csv` (o `data/errors.csv`) y se hace push a `main`.
 2. GitHub Actions valida los CSV (`validate.yml`). Si hay un error, el check sale en rojo.
-3. Cloudflare Pages recompila la app: el prebuild convierte los CSV en `cards.json`.
+3. Cloudflare (Workers Builds) recompila la app: el prebuild convierte los CSV en `cards.json`.
 4. La app se actualiza sola la próxima vez que la abres con conexión.
-5. El progreso (fechas, estabilidad, aciertos) vive en el dispositivo (IndexedDB). En la fase 2 se sincronizará con Supabase y se exportará cada noche a `data/review_state.csv`.
+5. El progreso (fechas, estabilidad, aciertos) se guarda en el dispositivo (IndexedDB) y, con sesión iniciada, se sincroniza con Supabase. Funciona sin conexión: los repasos se suben al volver.
+6. Cada noche una Action exporta el progreso a `data/review_state.csv` (generado, no se edita a mano).
 
 ## Estructura
 
@@ -20,12 +23,19 @@ data/vocab.csv ──push──▶ Cloudflare Pages compila ──▶ app en el 
 data/
   vocab.csv          vocabulario (lo editamos Claude y yo)
   errors.csv         mis errores repetidos, se repasan como "corrige la frase"
+  review_state.csv   GENERADO cada noche desde Supabase
 app/                 la PWA (Vite + React + TypeScript + ts-fsrs)
   scripts/build-data.ts   prebuild: data/*.csv → public/cards.json
+supabase/
+  schema.sql         tablas card_state y review_log con RLS
 scripts/
-  validate_csv.py    valida columnas, ids únicos y valores permitidos
+  validate_csv.py          valida columnas, ids únicos y valores permitidos
+  export_review_state.py   Supabase → data/review_state.csv
 .github/workflows/
   validate.yml       valida los CSV en cada push
+  sync-progress.yml  cada noche: exporta el progreso
+  keepalive.yml      lunes y jueves: consulta a Supabase para que no se pause
+package.json, wrangler.jsonc   despliegue en Cloudflare Workers
 ```
 
 ## Añadir vocabulario
@@ -82,7 +92,7 @@ python scripts/validate_csv.py
 - **Biblioteca:** búsqueda y filtros por tipo, área, registro, fuente y estado.
 - **Ajustes:** tema, nuevas por día (20 por defecto), retención objetivo (90 %), voz, incluir errores, exportar/importar copia.
 
-> El progreso se guarda **solo en ese dispositivo** hasta la fase 2. Exporta una copia JSON de vez en cuando (Ajustes → Exportar copia). Para pasar el progreso del móvil al PC: exportar en uno, importar en el otro.
+> **Sincronización:** Ajustes → Sincronización → email → te llega un código → lo escribes. Hazlo en cada dispositivo con el mismo email. Si dos dispositivos repasan la misma tarjeta, gana el repaso más reciente; el historial guarda los dos. La copia JSON (Ajustes → Copia de seguridad) sigue disponible como respaldo extra.
 
 ### Instalarla
 
@@ -104,21 +114,30 @@ npm test          # tests de la lógica de repaso
 npm run build     # build de producción en app/dist
 ```
 
-## Despliegue (Cloudflare Pages)
+## Despliegue (Cloudflare Workers)
 
-Conectado al repo con la integración de Git. Se publica en cada push a `main`.
+Worker `english` conectado al repo (Workers Builds). Se publica en cada push a `main` en
+https://english.alejottt1021.workers.dev.
 
 | Ajuste | Valor |
 | --- | --- |
-| Framework preset | None |
-| Production branch | `main` |
-| Root directory | `app` |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Variable de entorno | `NODE_VERSION` = `22` |
+| Root directory | `/` |
+| Build command | `npm run build` (compila `app/`) |
+| Deploy command | `npx wrangler deploy` (sube `app/dist` como assets, ver `wrangler.jsonc`) |
+| Build variables | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
+
+Las variables `VITE_*` se leen al compilar, así que van en **Build variables**, no en las variables del Worker. La anon key es pública por diseño; los datos los protege RLS.
+
+## Supabase
+
+1. SQL Editor → pegar `supabase/schema.sql` → Run.
+2. Authentication → Email Templates → **Magic Link**: incluir `{{ .Token }}` para que llegue el código (en el móvil instalado el enlace abriría el navegador, no la app).
+3. Authentication → URL Configuration → Site URL: `https://english.alejottt1021.workers.dev`.
+4. Tras entrar por primera vez: Authentication → Sign In / Providers → desactivar **Allow new users to sign up** (solo yo).
+5. GitHub → Settings → Secrets and variables → Actions: `SUPABASE_URL` y `SUPABASE_SERVICE_KEY` (service_role / secret key; nunca en la app).
 
 ## Fases
 
 - **Fase 1 (hecha):** CSV iniciales, validación, PWA offline con FSRS, Hoy, Repasar, Biblioteca, Ajustes y progreso en IndexedDB.
-- **Fase 2:** Supabase (login por magic link, tablas `card_state` y `review_log` con RLS), sincronización móvil ↔ PC, `sync-progress.yml` nocturno → `data/review_state.csv` y `keepalive.yml` semanal.
+- **Fase 2 (hecha):** Supabase (login con código por email, `card_state` y `review_log` con RLS), sincronización local-first móvil ↔ PC, `sync-progress.yml` nocturno → `data/review_state.csv` y `keepalive.yml`.
 - **Fase 3:** modos audio, dictado y cloze, estadísticas, sección Errores y exportador opcional a Anki.

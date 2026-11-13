@@ -1,0 +1,24 @@
+name: Supabase keepalive
+
+# El plan gratuito pausa el proyecto tras 7 días sin actividad. Dos consultas por semana
+# dejan margen aunque GitHub retrase algún cron.
+on:
+  schedule:
+    - cron: "43 9 * * 1,4" # lunes y jueves
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consulta a Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          curl --fail-with-body -sS \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            "$SUPABASE_URL/rest/v1/card_state?select=key&limit=1"
+          echo
+          echo "Supabase activo"
