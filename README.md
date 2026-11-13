@@ -92,7 +92,7 @@ python scripts/validate_csv.py
 - **Biblioteca:** búsqueda y filtros por tipo, área, registro, fuente y estado.
 - **Ajustes:** tema, nuevas por día (20 por defecto), retención objetivo (90 %), voz, incluir errores, exportar/importar copia.
 
-> **Sincronización:** Ajustes → Sincronización → email → te llega un código → lo escribes. Hazlo en cada dispositivo con el mismo email. Si dos dispositivos repasan la misma tarjeta, gana el repaso más reciente; el historial guarda los dos. La copia JSON (Ajustes → Copia de seguridad) sigue disponible como respaldo extra.
+> **Sincronización:** Ajustes → Sincronización → email y contraseña. Hazlo en cada dispositivo. Si dos dispositivos repasan la misma tarjeta, gana el repaso más reciente; el historial guarda los dos. La copia JSON (Ajustes → Copia de seguridad) sigue disponible como respaldo extra.
 
 ### Instalarla
 
@@ -131,13 +131,15 @@ Las variables `VITE_*` se leen al compilar, así que van en **Build variables**,
 ## Supabase
 
 1. SQL Editor → pegar `supabase/schema.sql` → Run.
-2. Authentication → Email Templates → **Magic Link**: incluir `{{ .Token }}` para que llegue el código (en el móvil instalado el enlace abriría el navegador, no la app).
-3. Authentication → URL Configuration → Site URL: `https://english.alejottt1021.workers.dev`.
-4. Tras entrar por primera vez: Authentication → Sign In / Providers → desactivar **Allow new users to sign up** (solo yo).
+2. Authentication → Users → **Add user → Create new user**: email + contraseña, marcando *Auto Confirm User*. Es el único usuario.
+3. Authentication → Sign In / Providers → desactivar **Allow new users to sign up**.
+4. Authentication → URL Configuration → Site URL: `https://english.alejottt1021.workers.dev`.
+
+La app entra con email + contraseña (en iPhone, un enlace mágico abriría Safari y la sesión no llegaría a la app instalada). Queda como alternativa el código por email, que necesita SMTP propio para poner `{{ .Token }}` en la plantilla.
 5. GitHub → Settings → Secrets and variables → Actions: `SUPABASE_URL` y `SUPABASE_SERVICE_KEY` (service_role / secret key; nunca en la app).
 
 ## Fases
 
 - **Fase 1 (hecha):** CSV iniciales, validación, PWA offline con FSRS, Hoy, Repasar, Biblioteca, Ajustes y progreso en IndexedDB.
-- **Fase 2 (hecha):** Supabase (login con código por email, `card_state` y `review_log` con RLS), sincronización local-first móvil ↔ PC, `sync-progress.yml` nocturno → `data/review_state.csv` y `keepalive.yml`.
+- **Fase 2 (hecha):** Supabase (login con email y contraseña, `card_state` y `review_log` con RLS), sincronización local-first móvil ↔ PC, `sync-progress.yml` nocturno → `data/review_state.csv` y `keepalive.yml`.
 - **Fase 3:** modos audio, dictado y cloze, estadísticas, sección Errores y exportador opcional a Anki.

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { sendLoginCode, signOut, syncNow, useCloud, verifyLoginCode } from '../lib/cloud'
+import { sendLoginCode, signInWithPassword, signOut, syncNow, useCloud, verifyLoginCode } from '../lib/cloud'
 import { formatInterval } from '../lib/scheduler'
 
 export function ago(iso: string | null): string {
@@ -13,7 +13,8 @@ export default function CloudSync() {
   const cloud = useCloud()
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
-  const [step, setStep] = useState<'email' | 'code'>('email')
+  const [password, setPassword] = useState('')
+  const [step, setStep] = useState<'password' | 'email' | 'code'>('password')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
 
@@ -45,8 +46,30 @@ export default function CloudSync() {
     return (
       <div className="card-surface group" data-testid="cloud-login">
         <h2>Sincronización</h2>
-        <p className="muted small">Entra con tu email para sincronizar el progreso entre el móvil y el PC. Te llega un código de un solo uso.</p>
-        {step === 'email' ? (
+        <p className="muted small">Entra para sincronizar el progreso entre el móvil y el PC.</p>
+        {step === 'password' ? (
+          <form
+            className="stack-form"
+            onSubmit={(e) => {
+              e.preventDefault()
+              void run(() => signInWithPassword(email.trim(), password))
+            }}
+          >
+            <input type="email" required autoComplete="username" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="Email" />
+            <input
+              type="password"
+              required
+              autoComplete="current-password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              aria-label="Contraseña"
+            />
+            <button className="btn btn-primary" disabled={busy || !email || !password}>
+              Entrar
+            </button>
+          </form>
+        ) : step === 'email' ? (
           <form
             className="row-form"
             onSubmit={(e) => {
@@ -90,6 +113,9 @@ export default function CloudSync() {
             Cambiar email o reenviar
           </button>
         )}
+        <button className="link-btn" onClick={() => setStep(step === 'password' ? 'email' : 'password')}>
+          {step === 'password' ? 'Entrar con código por email' : 'Entrar con contraseña'}
+        </button>
         {msg && <p className="muted small">{msg}</p>}
       </div>
     )

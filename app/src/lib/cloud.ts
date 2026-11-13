@@ -178,11 +178,17 @@ export async function initCloud(reload: () => void) {
 
 // ---------- login ----------
 
+export async function signInWithPassword(email: string, password: string): Promise<void> {
+  if (!supabase) throw new Error('Supabase no está configurado.')
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos.' : error.message)
+}
+
 export async function sendLoginCode(email: string): Promise<void> {
   if (!supabase) throw new Error('Supabase no está configurado.')
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin, shouldCreateUser: true },
+    options: { emailRedirectTo: window.location.origin, shouldCreateUser: false },
   })
   if (error) throw new Error(error.message)
 }
