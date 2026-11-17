@@ -8,3 +8,27 @@ want-that,I want that you check the code.,I want you to check the code.,Querer q
 know-continuous,I'm knowing the answer.,I know the answer.,Know es verbo de estado: no va en continuo.,tense,2026-11-13
 last-year-pp,I have been in London last year.,I was in London last year.,Last year → Simple Past.,tense,2026-11-13
 would-after-if,"If I would have more time, I would help.","If I had more time, I would help.","Hipotético: if + Simple Past, sin would tras if.",tense,2026-11-13
+looking-for-be,I'm looking for be the best trader.,I'm trying to be the best trader.,"Looking for + sustantivo. Con un verbo, usa trying to o looking to.",grammar,2026-11-09
+tired-to-be,I'm tired to be at the bottom.,I'm tired of being at the bottom.,Tired of + verbo en -ing.,preposition,2026-11-09
+for-better-life,I'm learning English for better my life.,I'm learning English to make my life better.,"Para el objetivo: to + verbo, no for + adjetivo.",grammar,2026-11-09
+mi-life-live,I want to improve mi live.,I want to improve my life.,Mi es español: en inglés es my. Life es el sustantivo; live es el verbo.,vocab,2026-11-09
+difficult-find,Is so difficult find a job.,It's so difficult to find a job.,Siempre hay sujeto (it) y adjetivo + to + verbo.,grammar,2026-11-09
+most-than,There are most demand than offer.,There are more candidates than jobs.,"More ... than, no most. Para empleo, jobs, no offer.",vocab,2026-11-09
+the-consulting,The consulting dont hire juniors.,Consulting companies don't hire junior people.,"Consulting companies, no the consulting. Don't lleva apóstrofo.",grammar,2026-11-09
+or-like-that,They want three years of experience or like that.,They want three years of experience or more.,Or like that no existe. Se dice or something like that (o algo así).,vocab,2026-11-09
+have-no-object,"They want experience, and obviously I don't have.","They want experience, and obviously I don't have that.","Have necesita objeto (it, that). En español puedes omitirlo; en inglés no.",grammar,2026-11-09
+really-real,This is a really example.,This is a real example.,Real es adjetivo (va antes del nombre). Really es adverbio (muy).,grammar,2026-11-09
+generated-generative,The image AI generative.,The image is AI generated.,"Falta el verbo is. Y es el participio -ed (generated), no -ive.",grammar,2026-11-10
+exhausted-exhausting,I'm exhausting.,I'm exhausted.,-ed = cómo te sientes. -ing = lo que causa el cansancio.,grammar,2026-11-09
+during-last,The block was during one hour.,The block was supposed to last one hour.,"Duración = last, no during. Supposed to = se suponía que.",vocab,2026-11-09
+two-hour,It's two hour already.,It's already been two hours.,Hours en plural. Already va antes del participio.,grammar,2026-11-09
+today-learn,Today I learn a little bit more than yesterday.,Today I learned a little more than yesterday.,Acción terminada → pasado simple (learned).,tense,2026-11-09
+master-of,I studied a master of data and ia.,I did a master's in data and AI.,Master's in + tema. IA en inglés es AI.,vocab,2026-11-09
+spain-capital,I live in spain.,I live in Spain.,Los países llevan mayúscula.,spelling,2026-11-09
+opportunities-two-p,I want more oportunities.,I want more opportunities.,Opportunities lleva dos p.,spelling,2026-11-09
+basically-spelling,"Bassicly, I want to learn.","Basically, I want to learn.",Basically: una sola s y termina en -ally.,spelling,2026-11-09
+community-spelling,That a Comunity note.,That's a Community Note.,Falta el 's de that's. Community lleva dos m.,spelling,2026-11-10
+who-i-am,Who I am?,Who am I?,"En preguntas directas, el verbo va antes del sujeto. I siempre en mayúscula.",word_order,2026-11-09
+know-now,And know I'll make it happen.,And now I'll make it happen.,Now = ahora. Know = saber. Suenan parecido.,spelling,2026-11-09
+a-the,I'm trying to be a the best trader.,I'm trying to be the best trader.,Un solo artículo.,article,2026-11-09
+whole-all,I want to be the best in whole aspects of my life.,I want to be the best in all aspects of my life.,Con plural: all aspects. Whole va con singular (the whole day).,vocab,2026-11-09
